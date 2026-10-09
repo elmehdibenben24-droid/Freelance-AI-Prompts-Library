@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freelance AI Prompts Hub</title>
+    <style>
+        :root {
+            --bg: #0f172a; --surface: #1e293b; --primary: #3b82f6;
+            --primary-hover: #2563eb; --text: #f8fafc; --text-muted: #94a3b8;
+            --border: #334155; --success: #10b981;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; min-height: 100vh; transition: all 0.3s; }
+        
+        /* Language Switcher */
+        .top-bar { display: flex; justify-content: flex-end; padding: 10px 20px; background: var(--surface); border-bottom: 1px solid var(--border); }
+        select#langSwitch { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 8px 15px; border-radius: 8px; outline: none; cursor: pointer; font-weight: bold; }
+        select#langSwitch:focus { border-color: var(--primary); }
+
+        /* Header */
+        header { padding: 20px; text-align: center; border-bottom: 1px solid var(--border); background: var(--surface); }
+        header h1 { color: var(--primary); font-size: 1.5rem; margin-bottom: 5px; }
+        header p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* Main Layout */
+        .container { display: flex; flex: 1; flex-direction: column; }
+        @media (min-width: 768px) { .container { flex-direction: row; } }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex; overflow-x: auto; padding: 15px; background: var(--surface);
+            border-bottom: 1px solid var(--border); gap: 10px; white-space: nowrap;
+        }
+        @media (min-width: 768px) {
+            .nav-tabs {
+                flex-direction: column; width: 250px; border-bottom: none;
+                border-right: 1px solid var(--border); overflow-y: auto;
+            }
+        }
+        html[dir="rtl"] .nav-tabs { border-right: none; border-left: 1px solid var(--border); }
+        
+        .tab-btn {
+            background: transparent; color: var(--text-muted); border: 1px solid var(--border);
+            padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: 600;
+            transition: all 0.2s; text-align: left;
+        }
+        html[dir="rtl"] .tab-btn { text-align: right; }
+        .tab-btn.active, .tab-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* Content Area */
+        .content { flex: 1; padding: 20px; max-width: 800px; margin: 0 auto; width: 100%; }
+        .prompt-card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+            padding: 20px; margin-bottom: 20px; display: none; animation: fadeIn 0.3s ease;
+        }
+        .prompt-card.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .card-header h2 { font-size: 1.2rem; color: var(--primary); }
+        
+        .prompt-box {
+            background: var(--bg); padding: 15px; border-radius: 8px; font-family: monospace;
+            font-size: 0.95rem; line-height: 1.6; color: #e2e8f0; border: 1px dashed var(--border);
+            margin-bottom: 15px; white-space: pre-wrap;
+        }
+
+        .copy-btn {
+            background: var(--primary); color: white; border: none; padding: 10px 20px;
+            border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.2s;
+        }
+        .copy-btn.copied { background: var(--success); }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <select id="langSwitch" onchange="changeLanguage(this.value)">
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+            <option value="ar">العربية (Darija)</option>
+        </select>
+    </div>
+
+    <header>
+        <h1 id="appTitle">Freelance AI Prompts Hub</h1>
+        <p id="appDesc">Premium ChatGPT & Claude Prompts for Freelancers</p>
+    </header>
+
+    <div class="container">
+        <div class="nav-tabs">
+            <button class="tab-btn active" id="tab1" onclick="showCategory('acquisition', this)">1. Client Acquisition</button>
+            <button class="tab-btn" id="tab2" onclick="showCategory('proposal', this)">2. Proposal Writing</button>
+            <button class="tab-btn" id="tab3" onclick="showCategory('execution', this)">3. Task Execution</button>
+            <button class="tab-btn" id="tab4" onclick="showCategory('communication', this)">4. Client Communication</button>
+        </div>
+
+        <div class="content">
+            <!-- Category 1 -->
+            <div class="prompt-card active" data-category="acquisition">
+                <div class="card-header"><h2 id="card1Title">Client Acquisition (Niche Discovery)</h2></div>
+                <div class="prompt-box" id="p1" dir="auto">I am a beginner [Insert your field, e.g., Graphic Designer/Programmer]. Analyze the Upwork platform and give me 5 sub-niches with high demand and low competition. Suggest how to build my portfolio to attract clients interested in these niches.</div>
+                <button class="copy-btn btn-copy-text" onclick="copyPrompt('p1', this)">Copy Prompt</button>
+            </div>
+
+            <!-- Category 2 -->
+            <div class="prompt-card" data-category="proposal">
+                <div class="card-header"><h2 id="card2Title">Proposal Writing (Cover Letter)</h2></div>
+                <div class="prompt-box" id="p2" dir="auto">Here is a project description I found on Upwork: [Insert description]. Write a Cover Letter for me consisting of 4 paragraphs, focusing on the solution I will provide to the client rather than my skills, and ending with a smart question that prompts them to reply.</div>
+                <button class="copy-btn btn-copy-text" onclick="copyPrompt('p2', this)">Copy Prompt</button>
+            </div>
+
+            <!-- Category 3 -->
+            <div class="prompt-card" data-category="execution">
+                <div class="card-header"><h2 id="card3Title">Task Execution (Action Plan)</h2></div>
+                <div class="prompt-box" id="p3" dir="auto">The client asked me to create an action plan for a [Insert project type] project. Act as an expert in this field and give me a 5-step action plan, with key ideas and an estimated timeline to present as an initial draft to show my professionalism.</div>
+                <button class="copy-btn btn-copy-text" onclick="copyPrompt('p3', this)">Copy Prompt</button>
+            </div>
+
+            <!-- Category 4 -->
+            <div class="prompt-card" data-category="communication">
+                <div class="card-header"><h2 id="card4Title">Client Communication (Scope Creep)</h2></div>
+                <div class="prompt-box" id="p4" dir="auto">The client asked for many changes outside our initial agreement. Write a professional and diplomatic message explaining that these changes will require an additional budget, without ruining the relationship or sounding aggressive.</div>
+                <button class="copy-btn btn-copy-text" onclick="copyPrompt('p4', this)">Copy Prompt</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "Freelance AI Prompts Hub",
+                desc: "Premium ChatGPT & Claude Prompts for Freelancers",
+                tab1: "1. Client Acquisition", tab2: "2. Proposal Writing", tab3: "3. Task Execution", tab4: "4. Client Communication",
+                card1Title: "Client Acquisition (Niche Discovery)",
+                p1: "I am a beginner [Insert your field, e.g., Graphic Designer/Programmer]. Analyze the Upwork platform and give me 5 sub-niches with high demand and low competition. Suggest how to build my portfolio to attract clients interested in these niches.",
+                card2Title: "Proposal Writing (Cover Letter)",
+                p2: "Here is a project description I found on Upwork: [Insert description]. Write a Cover Letter for me consisting of 4 paragraphs, focusing on the solution I will provide to the client rather than my skills, and ending with a smart question that prompts them to reply.",
+                card3Title: "Task Execution (Action Plan)",
+                p3: "The client asked me to create an action plan for a [Insert project type] project. Act as an expert in this field and give me a 5-step action plan, with key ideas and an estimated timeline to present as an initial draft to show my professionalism.",
+                card4Title: "Client Communication (Scope Creep)",
+                p4: "The client asked for many changes outside our initial agreement. Write a professional and diplomatic message explaining that these changes will require an additional budget, without ruining the relationship or sounding aggressive.",
+                copyText: "Copy Prompt", copiedText: "Copied! ✔", dir: "ltr"
+            },
+            fr: {
+                title: "Hub de Prompts IA Freelance",
+                desc: "Prompts Premium ChatGPT & Claude pour Freelances",
+                tab1: "1. Acquisition de Clients", tab2: "2. Rédaction de Propositions", tab3: "3. Exécution des Tâches", tab4: "4. Communication Client",
+                card1Title: "Acquisition de Clients (Découverte de Niche)",
+                p1: "Je suis un [Insérez votre domaine, ex: Graphiste/Programmeur] débutant. Analysez la plateforme Upwork et donnez-moi 5 sous-niches avec une forte demande et peu de concurrence. Suggérez-moi comment construire mon portfolio pour attirer les clients intéressés par ces niches.",
+                card2Title: "Rédaction de Propositions (Lettre de Motivation)",
+                p2: "Voici une description de projet trouvée sur Upwork : [Insérez la description]. Rédigez-moi une lettre de motivation composée de 4 paragraphes, en me concentrant sur la solution que je vais apporter au client plutôt que sur mes compétences, et en terminant par une question intelligente qui l'incite à répondre.",
+                card3Title: "Exécution des Tâches (Plan d'Action)",
+                p3: "Le client m'a demandé de créer un plan d'action pour un projet de [Insérez le type de projet]. Agissez en tant qu'expert dans ce domaine et donnez-moi un plan d'action en 5 étapes, avec les idées clés et un calendrier estimatif à présenter comme brouillon initial.",
+                card4Title: "Communication Client (Dérapage du Périmètre)",
+                p4: "Le client a demandé de nombreuses modifications en dehors de notre accord initial. Rédigez un message professionnel et diplomatique expliquant que ces modifications nécessiteront un budget supplémentaire, sans ruiner la relation ou paraître agressif.",
+                copyText: "Copier le Prompt", copiedText: "Copié ! ✔", dir: "ltr"
+            },
+            ar: {
+                title: "مكتبة أوامر الذكاء الاصطناعي",
+                desc: "أوامر شات جي بي تي وكلود احترافية للعمل الحر",
+                tab1: "1. صيد الزبناء", tab2: "2. كتابة العروض", tab3: "3. إنجاز العمل", tab4: "4. التواصل وحل المشاكل",
+                card1Title: "صيد الزبناء (اكتشاف النيتش)",
+                p1: "أنا [أدخل تخصصك، مثلا: مصمم غرافيك/مبرمج] مبتدئ. حلل ليا منصة Upwork وعطيني 5 مجالات فرعية (Niches) فيها طلب عالي ومنافسة قليلة، واقترح عليا كيفاش نبني معرض الأعمال (Portfolio) ديالي باش نلفت انتباه الزبناء المهتمين بهاد المجالات.",
+                card2Title: "كتابة العروض (رسالة التغطية)",
+                p2: "هذا وصف ديال مشروع لقيتو فموقع مستقل/Upwork: [إدراج الوصف هنا]. اكتب ليا رسالة عرض (Cover Letter) بالإنجليزية/الفرنسية كتكون من 4 فقرات، كتركز على الحل لي غنقدم للزبون عوض التركيز على المهارات ديالي، وكتنتهي بسؤال ذكي كيخليه يجاوبني.",
+                card3Title: "إنجاز العمل (خطة العمل)",
+                p3: "الزبون طلب مني نقاد ليه خطة عمل لمشروع [أدخل نوع المشروع]. لعب دور خبير في هاد المجال، وعطيني خطة عمل من 5 خطوات، مع الأفكار الرئيسية، والمدة الزمنية التقريبية باش نقدمها ليه كمسودة أولية تبين الاحترافية ديالي.",
+                card4Title: "التواصل وحل المشاكل (تجاوز نطاق العمل)",
+                p4: "الزبون طلب مني تعديلات كثيرة خارجة على الاتفاق الأول. اكتب ليا رسالة احترافية ودبلوماسية كنشرح ليه فيها بلي هاد التعديلات غتتطلب ميزانية إضافية، بلا ما نخسر العلاقة معاه أو نبان هجومي.",
+                copyText: "نسخ الأمر", copiedText: "تم النسخ! ✔", dir: "rtl"
+            }
+        };
+
+        let currentLang = 'en';
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            
+            document.documentElement.lang = lang;
+            document.documentElement.dir = t.dir;
+            
+            document.getElementById('appTitle').innerText = t.title;
+            document.getElementById('appDesc').innerText = t.desc;
+            
+            document.getElementById('tab1').innerText = t.tab1;
+            document.getElementById('tab2').innerText = t.tab2;
+            document.getElementById('tab3').innerText = t.tab3;
+            document.getElementById('tab4').innerText = t.tab4;
+            
+            document.getElementById('card1Title').innerText = t.card1Title;
+            document.getElementById('card2Title').innerText = t.card2Title;
+            document.getElementById('card3Title').innerText = t.card3Title;
+            document.getElementById('card4Title').innerText = t.card4Title;
+            
+            document.getElementById('p1').innerText = t.p1;
+            document.getElementById('p2').innerText = t.p2;
+            document.getElementById('p3').innerText = t.p3;
+            document.getElementById('p4').innerText = t.p4;
+            
+            document.querySelectorAll('.btn-copy-text').forEach(btn => {
+                btn.innerText = t.copyText;
+            });
+        }
+
+        function showCategory(categoryId, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            document.querySelectorAll('.prompt-card').forEach(card => {
+                if (card.dataset.category === categoryId) {
+                    card.classList.add('active');
+                } else {
+                    card.classList.remove('active');
+                }
+            });
+        }
+
+        function copyPrompt(elementId, btn) {
+            const textToCopy = document.getElementById(elementId).innerText;
+            const t = translations[currentLang];
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                btn.innerText = t.copiedText;
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    btn.innerText = t.copyText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
